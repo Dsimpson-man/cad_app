@@ -1,0 +1,162 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {};
+	objectVersion = 56;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		B00000000000000000000065 /* DOneCADApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = B00000000000000000000001 /* DOneCADApp.swift */; };
+		B00000000000000000000066 /* MainWorkspaceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B00000000000000000000002 /* MainWorkspaceView.swift */; };
+		B00000000000000000000067 /* CADViewport.swift in Sources */ = {isa = PBXBuildFile; fileRef = B00000000000000000000003 /* CADViewport.swift */; };
+		B00000000000000000000068 /* CADMetalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B00000000000000000000004 /* CADMetalView.swift */; };
+		B00000000000000000000069 /* CADRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = B00000000000000000000005 /* CADRenderer.swift */; };
+		B0000000000000000000006A /* Math.swift in Sources */ = {isa = PBXBuildFile; fileRef = B00000000000000000000006 /* Math.swift */; };
+		B0000000000000000000006B /* Shaders.metal in Sources */ = {isa = PBXBuildFile; fileRef = B00000000000000000000007 /* Shaders.metal */; };
+		B0000000000000000000006C /* CADCoreBridge.swift in Sources */ = {isa = PBXBuildFile; fileRef = B00000000000000000000008 /* CADCoreBridge.swift */; };
+		B0000000000000000000006D /* CADViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B00000000000000000000009 /* CADViewModel.swift */; };
+		B0000000000000000000006F /* CADCore.mm in Sources */ = {isa = PBXBuildFile; fileRef = B0000000000000000000000B /* CADCore.mm */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		B00000000000000000000001 /* DOneCADApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = App/DOneCADApp.swift; sourceTree = "<group>"; };
+		B00000000000000000000002 /* MainWorkspaceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = App/MainWorkspaceView.swift; sourceTree = "<group>"; };
+		B00000000000000000000003 /* CADViewport.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Viewport/CADViewport.swift; sourceTree = "<group>"; };
+		B00000000000000000000004 /* CADMetalView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Viewport/CADMetalView.swift; sourceTree = "<group>"; };
+		B00000000000000000000005 /* CADRenderer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Viewport/CADRenderer.swift; sourceTree = "<group>"; };
+		B00000000000000000000006 /* Math.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Viewport/Math.swift; sourceTree = "<group>"; };
+		B00000000000000000000007 /* Shaders.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = Viewport/Shaders.metal; sourceTree = "<group>"; };
+		B00000000000000000000008 /* CADCoreBridge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Model/CADCoreBridge.swift; sourceTree = "<group>"; };
+		B00000000000000000000009 /* CADViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Model/CADViewModel.swift; sourceTree = "<group>"; };
+		B0000000000000000000000A /* CADCore.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Core/CADCore.h; sourceTree = "<group>"; };
+		B0000000000000000000000B /* CADCore.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = Core/CADCore.mm; sourceTree = "<group>"; };
+		B0000000000000000000000C /* DOneCAD-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DOneCAD-Bridging-Header.h; sourceTree = "<group>"; };
+		A0000000000000000000000A /* DOneCAD.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DOneCAD.app; sourceTree = BUILT_PRODUCTS_DIR; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		A00000000000000000000007 /* Frameworks */ = {isa = PBXFrameworksBuildPhase; buildActionMask = 2147483647; files = (); runOnlyForDeploymentPostprocessing = 0; };
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		A00000000000000000000002 = {
+			isa = PBXGroup;
+			children = (
+\t\t\t\tB00000000000000000000001 /* DOneCADApp.swift */,
+\t\t\t\tB00000000000000000000002 /* MainWorkspaceView.swift */,
+\t\t\t\tB00000000000000000000003 /* CADViewport.swift */,
+\t\t\t\tB00000000000000000000004 /* CADMetalView.swift */,
+\t\t\t\tB00000000000000000000005 /* CADRenderer.swift */,
+\t\t\t\tB00000000000000000000006 /* Math.swift */,
+\t\t\t\tB00000000000000000000007 /* Shaders.metal */,
+\t\t\t\tB00000000000000000000008 /* CADCoreBridge.swift */,
+\t\t\t\tB00000000000000000000009 /* CADViewModel.swift */,
+\t\t\t\tB0000000000000000000000A /* CADCore.h */,
+\t\t\t\tB0000000000000000000000B /* CADCore.mm */,
+\t\t\t\tB0000000000000000000000C /* DOneCAD-Bridging-Header.h */,
+				A00000000000000000000003 /* Products */,
+			);
+			path = DOneCAD;
+			sourceTree = "<group>";
+		};
+		A00000000000000000000003 /* Products */ = {isa = PBXGroup; children = (A0000000000000000000000A /* DOneCAD.app */,); name = Products; sourceTree = "<group>"; };
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		A00000000000000000000004 /* DOneCAD */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A00000000000000000000009 /* Build configuration list for PBXNativeTarget "DOneCAD" */;
+			buildPhases = (A00000000000000000000005 /* Sources */, A00000000000000000000007 /* Frameworks */, A00000000000000000000006 /* Resources */,);
+			buildRules = ();
+			dependencies = ();
+			name = DOneCAD;
+			productName = DOneCAD;
+			productReference = A0000000000000000000000A /* DOneCAD.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		A00000000000000000000001 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {BuildIndependentTargetsInParallel = 1; LastSwiftUpdateCheck = 1600; LastUpgradeCheck = 1600; TargetAttributes = {A00000000000000000000004 = {CreatedOnToolsVersion = 16.0; }; }; };
+			buildConfigurationList = A00000000000000000000008 /* Build configuration list for PBXProject "DOneCAD" */;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (en, Base);
+			mainGroup = A00000000000000000000002;
+			productRefGroup = A00000000000000000000003 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (A00000000000000000000004 /* DOneCAD */,);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		A00000000000000000000006 /* Resources */ = {isa = PBXResourcesBuildPhase; buildActionMask = 2147483647; files = (); runOnlyForDeploymentPostprocessing = 0; };
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		A00000000000000000000005 /* Sources */ = {isa = PBXSourcesBuildPhase; buildActionMask = 2147483647; files = (
+				B00000000000000000000065 /* DOneCADApp.swift in Sources */,
+				B00000000000000000000066 /* MainWorkspaceView.swift in Sources */,
+				B00000000000000000000067 /* CADViewport.swift in Sources */,
+				B00000000000000000000068 /* CADMetalView.swift in Sources */,
+				B00000000000000000000069 /* CADRenderer.swift in Sources */,
+				B0000000000000000000006A /* Math.swift in Sources */,
+				B0000000000000000000006B /* Shaders.metal in Sources */,
+				B0000000000000000000006C /* CADCoreBridge.swift in Sources */,
+				B0000000000000000000006D /* CADViewModel.swift in Sources */,
+				B0000000000000000000006F /* CADCore.mm in Sources */,
+			); runOnlyForDeploymentPostprocessing = 0; };
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		C00000000000000000000001 /* Debug */ = {isa = XCBuildConfiguration; buildSettings = {CLANG_CXX_LANGUAGE_STANDARD = "gnu++17"; SDKROOT = iphoneos; IPHONEOS_DEPLOYMENT_TARGET = 17.0; SWIFT_VERSION = 5.0; }; name = Debug; };
+		C00000000000000000000002 /* Release */ = {isa = XCBuildConfiguration; buildSettings = {CLANG_CXX_LANGUAGE_STANDARD = "gnu++17"; SDKROOT = iphoneos; IPHONEOS_DEPLOYMENT_TARGET = 17.0; SWIFT_VERSION = 5.0; }; name = Release; };
+		C00000000000000000000003 /* Debug */ = {isa = XCBuildConfiguration; buildSettings = {
+			CODE_SIGN_STYLE = Automatic;
+			CURRENT_PROJECT_VERSION = 1;
+			DEVELOPMENT_TEAM = "";
+			GENERATE_INFOPLIST_FILE = YES;
+			INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+			INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+			INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+			INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait";
+			LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+			MARKETING_VERSION = 0.1;
+			PRODUCT_BUNDLE_IDENTIFIER = com.done.cad.prototype;
+			PRODUCT_NAME = "$(TARGET_NAME)";
+			SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+			SUPPORTS_MACCATALYST = NO;
+			SWIFT_OBJC_BRIDGING_HEADER = "DOneCAD/DOneCAD-Bridging-Header.h";
+			TARGETED_DEVICE_FAMILY = 2;
+		}; name = Debug; };
+		C00000000000000000000004 /* Release */ = {isa = XCBuildConfiguration; buildSettings = {
+			CODE_SIGN_STYLE = Automatic;
+			CURRENT_PROJECT_VERSION = 1;
+			DEVELOPMENT_TEAM = "";
+			GENERATE_INFOPLIST_FILE = YES;
+			INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+			INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+			INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+			INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait";
+			LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+			MARKETING_VERSION = 0.1;
+			PRODUCT_BUNDLE_IDENTIFIER = com.done.cad.prototype;
+			PRODUCT_NAME = "$(TARGET_NAME)";
+			SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+			SUPPORTS_MACCATALYST = NO;
+			SWIFT_OBJC_BRIDGING_HEADER = "DOneCAD/DOneCAD-Bridging-Header.h";
+			TARGETED_DEVICE_FAMILY = 2;
+		}; name = Release; };
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		A00000000000000000000008 = {isa = XCConfigurationList; buildConfigurations = (C00000000000000000000001 /* Debug */, C00000000000000000000002 /* Release */,); defaultConfigurationIsVisible = 0; defaultConfigurationName = Release; };
+		A00000000000000000000009 = {isa = XCConfigurationList; buildConfigurations = (C00000000000000000000003 /* Debug */, C00000000000000000000004 /* Release */,); defaultConfigurationIsVisible = 0; defaultConfigurationName = Release; };
+/* End XCConfigurationList section */
+	};
+	rootObject = A00000000000000000000001 /* Project object */;
+}
