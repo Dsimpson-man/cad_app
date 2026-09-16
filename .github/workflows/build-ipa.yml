@@ -82,23 +82,51 @@ jobs:
           fi
           echo "Shared scheme present: ${SCHEME_FILE}"
 
-      # Every PBXFileReference must point at a file that really exists, and
-      # file paths must not depend on PBXGroup inheritance. Without this a
-      # path-resolving surprise only shows up as a confusing
-      # "Build input file cannot be found" deep in the compile step.
+      # Every PBXFileReference whose path looks SRCROOT-relative must point at
+      # a file that really exists, and file paths must not depend on PBXGroup
+      # inheritance. Without this a path-resolving surprise only shows up as a
+      # confusing "Build input file cannot be found" deep in the compile step.
+      # System frameworks (System/Library/Frameworks/...) are SDK-relative and
+      # are skipped: they are not files in the checkout.
       - name: Verify every source file reference resolves
         run: |
           set -euo pipefail
           fail=0
-          while IFS= read -r path; do
-            [ -z "${path}" ] && continue
-            if [ ! -f "${path}" ]; then
-              echo "::error::pbxproj references a missing file: ${path}"
+
+          awk '
+            /isa = PBXFileReference;/ { inref = 1 }
+            inref && /path = / {
+              line = $0
+              sub(/^.*path = /, "", line)
+              sub(/;.*$/, "", line)
+              gsub(/"/, "", line)
+              if (line != "") print line
+            }
+            inref && /};/ { inref = 0 }
+          ' "${PROJECT}/project.pbxproj" > "$RUNNER_TEMP/refs.txt"
+
+          echo "Referenced paths:"
+          while IFS= read -r p; do
+            [ -z "${p}" ] && continue
+            case "${p}" in
+              # Not files in the checkout: SDK frameworks and build products
+              System/*)            echo "  sdk ${p}"; continue ;;
+              /*)                  echo "  abs ${p}"; continue ;;
+              # Build products: only interesting when they carry a slash,
+              # e.g. Foo.app/PlugIns/Bar.appex. A bare *.app / *.framework
+              # is a product, not a source file.
+              */*) ;;
+              *.app|*.framework|*.bundle|*.a|*.dylib|*.xpc)
+                                   echo "  out ${p}"; continue ;;
+              *)                   echo "  out ${p}"; continue ;;
+            esac
+            if [ -e "${p}" ]; then
+              echo "  ok  ${p}"
+            else
+              echo "::error::pbxproj references a missing file: ${p}"
               fail=1
             fi
-          done < <(grep -oE 'path = [A-Za-z0-9_./-]+;' "${PROJECT}/project.pbxproj" \
-                     | sed 's/^path = //; s/;$//' \
-                     | grep '/' || true)
+          done < "$RUNNER_TEMP/refs.txt"
 
           # A PBXGroup with a path is what broke resolution before.
           if grep -A3 'isa = PBXGroup' "${PROJECT}/project.pbxproj" | grep -qE '^\s*path = '; then
