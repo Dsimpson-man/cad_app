@@ -137,7 +137,6 @@
 			buildConfigurationList = A00000000000000000000009 /* Build configuration list for PBXNativeTarget "DOneCAD" */;
 			buildPhases = (
 				A00000000000000000000005 /* Sources */,
-				A0000000000000000000000B /* Metal Sources */,
 				A00000000000000000000007 /* Frameworks */,
 				A00000000000000000000006 /* Resources */,
 			);
@@ -204,17 +203,10 @@
 				B00000000000000000000068 /* CADMetalView.swift in Sources */,
 				B00000000000000000000069 /* CADRenderer.swift in Sources */,
 				B0000000000000000000006A /* Math.swift in Sources */,
+				B0000000000000000000006B /* Shaders.metal in Sources */,
 				B0000000000000000000006C /* CADCoreBridge.swift in Sources */,
 				B0000000000000000000006D /* CADViewModel.swift in Sources */,
 				B0000000000000000000006F /* CADCore.mm in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		A0000000000000000000000B /* Metal Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				B0000000000000000000006B /* Shaders.metal in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
