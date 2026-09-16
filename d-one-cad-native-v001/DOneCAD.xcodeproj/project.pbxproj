@@ -22,18 +22,18 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		B00000000000000000000001 /* DOneCADApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DOneCADApp.swift; sourceTree = "<group>"; };
-		B00000000000000000000002 /* MainWorkspaceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainWorkspaceView.swift; sourceTree = "<group>"; };
-		B00000000000000000000003 /* CADViewport.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CADViewport.swift; sourceTree = "<group>"; };
-		B00000000000000000000004 /* CADMetalView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CADMetalView.swift; sourceTree = "<group>"; };
-		B00000000000000000000005 /* CADRenderer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CADRenderer.swift; sourceTree = "<group>"; };
-		B00000000000000000000006 /* Math.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Math.swift; sourceTree = "<group>"; };
-		B00000000000000000000007 /* Shaders.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = Shaders.metal; sourceTree = "<group>"; };
-		B00000000000000000000008 /* CADCoreBridge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CADCoreBridge.swift; sourceTree = "<group>"; };
-		B00000000000000000000009 /* CADViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CADViewModel.swift; sourceTree = "<group>"; };
-		B0000000000000000000000A /* CADCore.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CADCore.h; sourceTree = "<group>"; };
-		B0000000000000000000000B /* CADCore.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = CADCore.mm; sourceTree = "<group>"; };
-		B0000000000000000000000C /* DOneCAD-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DOneCAD-Bridging-Header.h; sourceTree = "<group>"; };
+		B00000000000000000000001 /* DOneCADApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DOneCAD/App/DOneCADApp.swift; sourceTree = "<group>"; };
+		B00000000000000000000002 /* MainWorkspaceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DOneCAD/App/MainWorkspaceView.swift; sourceTree = "<group>"; };
+		B00000000000000000000003 /* CADViewport.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DOneCAD/Viewport/CADViewport.swift; sourceTree = "<group>"; };
+		B00000000000000000000004 /* CADMetalView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DOneCAD/Viewport/CADMetalView.swift; sourceTree = "<group>"; };
+		B00000000000000000000005 /* CADRenderer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DOneCAD/Viewport/CADRenderer.swift; sourceTree = "<group>"; };
+		B00000000000000000000006 /* Math.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DOneCAD/Viewport/Math.swift; sourceTree = "<group>"; };
+		B00000000000000000000007 /* Shaders.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = DOneCAD/Viewport/Shaders.metal; sourceTree = "<group>"; };
+		B00000000000000000000008 /* CADCoreBridge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DOneCAD/Model/CADCoreBridge.swift; sourceTree = "<group>"; };
+		B00000000000000000000009 /* CADViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DOneCAD/Model/CADViewModel.swift; sourceTree = "<group>"; };
+		B0000000000000000000000A /* CADCore.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DOneCAD/Core/CADCore.h; sourceTree = "<group>"; };
+		B0000000000000000000000B /* CADCore.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = DOneCAD/Core/CADCore.mm; sourceTree = "<group>"; };
+		B0000000000000000000000C /* DOneCAD-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DOneCAD/Supporting/DOneCAD-Bridging-Header.h; sourceTree = "<group>"; };
 		B00000000000000000000020 /* MetalKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MetalKit.framework; path = System/Library/Frameworks/MetalKit.framework; sourceTree = SDKROOT; };
 		B00000000000000000000021 /* Metal.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Metal.framework; path = System/Library/Frameworks/Metal.framework; sourceTree = SDKROOT; };
 		A0000000000000000000000A /* DOneCAD.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DOneCAD.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -79,7 +79,7 @@
 				B00000000000000000000001 /* DOneCADApp.swift */,
 				B00000000000000000000002 /* MainWorkspaceView.swift */,
 			);
-			path = App;
+			name = App;
 			sourceTree = "<group>";
 		};
 		A00000000000000000000011 /* Model */ = {
@@ -88,7 +88,7 @@
 				B00000000000000000000008 /* CADCoreBridge.swift */,
 				B00000000000000000000009 /* CADViewModel.swift */,
 			);
-			path = Model;
+			name = Model;
 			sourceTree = "<group>";
 		};
 		A00000000000000000000012 /* Viewport */ = {
@@ -100,7 +100,7 @@
 				B00000000000000000000006 /* Math.swift */,
 				B00000000000000000000007 /* Shaders.metal */,
 			);
-			path = Viewport;
+			name = Viewport;
 			sourceTree = "<group>";
 		};
 		A00000000000000000000013 /* Core */ = {
@@ -109,7 +109,7 @@
 				B0000000000000000000000A /* CADCore.h */,
 				B0000000000000000000000B /* CADCore.mm */,
 			);
-			path = Core;
+			name = Core;
 			sourceTree = "<group>";
 		};
 		A00000000000000000000014 /* Supporting */ = {
@@ -117,7 +117,7 @@
 			children = (
 				B0000000000000000000000C /* DOneCAD-Bridging-Header.h */,
 			);
-			path = Supporting;
+			name = Supporting;
 			sourceTree = "<group>";
 		};
 		A00000000000000000000015 /* Frameworks */ = {

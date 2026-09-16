@@ -82,6 +82,33 @@ jobs:
           fi
           echo "Shared scheme present: ${SCHEME_FILE}"
 
+      # Every PBXFileReference must point at a file that really exists, and
+      # file paths must not depend on PBXGroup inheritance. Without this a
+      # path-resolving surprise only shows up as a confusing
+      # "Build input file cannot be found" deep in the compile step.
+      - name: Verify every source file reference resolves
+        run: |
+          set -euo pipefail
+          fail=0
+          while IFS= read -r path; do
+            [ -z "${path}" ] && continue
+            if [ ! -f "${path}" ]; then
+              echo "::error::pbxproj references a missing file: ${path}"
+              fail=1
+            fi
+          done < <(grep -oE 'path = [A-Za-z0-9_./-]+;' "${PROJECT}/project.pbxproj" \
+                     | sed 's/^path = //; s/;$//' \
+                     | grep '/' || true)
+
+          # A PBXGroup with a path is what broke resolution before.
+          if grep -A3 'isa = PBXGroup' "${PROJECT}/project.pbxproj" | grep -qE '^\s*path = '; then
+            echo "::error file=${PROJECT}/project.pbxproj::A PBXGroup sets \"path\"; file references should be SRCROOT-relative instead."
+            fail=1
+          fi
+
+          [ "${fail}" -eq 0 ] || exit 1
+          echo "All source file references resolve."
+
       - name: Resolve Swift packages
         run: |
           set -euo pipefail
