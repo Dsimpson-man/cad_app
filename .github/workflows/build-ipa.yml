@@ -153,6 +153,11 @@ jobs:
           CONFIG="${{ github.event.inputs.configuration || 'Release' }}"
           echo "Configuration: ${CONFIG}"
 
+          mkdir -p build
+
+          # NOTE: set -o pipefail is essential here. Without it the pipeline's
+          # exit status is tee's (always 0), so a failed xcodebuild would be
+          # reported as success.
           xcodebuild \
             -project "${PROJECT}" \
             -scheme "${SCHEME}" \
@@ -166,8 +171,9 @@ jobs:
             CODE_SIGN_ENTITLEMENTS="" \
             ENABLE_BITCODE=NO \
             ONLY_ACTIVE_ARCH=NO \
-            build \
-            | tee build/xcodebuild.log
+            build 2>&1 | tee build/xcodebuild.log
+
+          echo "xcodebuild exited ${PIPESTATUS[0]}"
 
       - name: Verify the app bundle and its Metal library
         run: |
@@ -255,14 +261,21 @@ jobs:
         with:
           name: DOneCAD-xcodebuild-log
           path: build/xcodebuild.log
-          if-no-files-found: ignore
+          if-no-files-found: warn
           retention-days: 14
 
       # On failure, surface the interesting parts of the log in the run page.
       - name: Show errors on failure
         if: failure()
         run: |
+          set +e
+          LOG=build/xcodebuild.log
           echo "================ xcodebuild errors ================"
-          grep -nE "error:|error :|fatal error:|❌|** BUILD FAILED **" build/xcodebuild.log | tail -n 120 || true
-          echo "==================================================="
-          tail -n 200 build/xcodebuild.log || true
+          if [ -f "$LOG" ]; then
+            grep -nE "error:|error :|fatal error:|Undefined symbol|BUILD FAILED" "$LOG" | tail -n 120
+            echo "==================================================="
+            tail -n 200 "$LOG"
+          else
+            echo "No xcodebuild log at $LOG (the failure happened before or during the build)."
+          fi
+          exit 0
