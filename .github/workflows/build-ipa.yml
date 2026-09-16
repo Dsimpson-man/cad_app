@@ -1,0 +1,213 @@
+name: Build iPad IPA
+
+# Manual runs:  GitHub -> Actions -> Build iPad IPA -> Run workflow
+# Automatic smoke test on every push to main.
+on:
+  workflow_dispatch:
+    inputs:
+      configuration:
+        description: 'Build configuration'
+        required: true
+        default: 'Release'
+        type: choice
+        options:
+          - Release
+          - Debug
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+# Only one build per ref; a newer push cancels the older in-flight run.
+concurrency:
+  group: build-ipa-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  PROJECT: DOneCAD.xcodeproj
+  SCHEME: DOneCAD
+  APP_NAME: DOneCAD
+  IPA_NAME: DOneCAD-unsigned.ipa
+  ARTIFACT_NAME: DOneCAD-iPad-unsigned-IPA
+
+jobs:
+  build:
+    name: Build unsigned iPad IPA
+    runs-on: macos-latest
+    timeout-minutes: 45
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Show toolchain
+        run: |
+          set -euo pipefail
+          xcodebuild -version
+          swift --version
+          echo "SDKs:"
+          xcodebuild -showsdks | sed -n '1,40p'
+
+      # ---------------------------------------------------------------
+      # 1. Sanity-check the Xcode project BEFORE spending time building.
+      #    plutil is the same parser Xcode itself uses, so a damaged or
+      #    literal-"\t"-corrupted pbxproj fails here with a clear message.
+      # ---------------------------------------------------------------
+      - name: Lint project.pbxproj
+        run: |
+          set -euo pipefail
+          plutil -lint "${PROJECT}/project.pbxproj"
+
+      - name: Fail fast on literal backslash-t in pbxproj
+        run: |
+          set -euo pipefail
+          if grep -n '\\t' "${PROJECT}/project.pbxproj"; then
+            echo "::error file=${PROJECT}/project.pbxproj::Found literal backslash-t sequences; the project will not parse."
+            exit 1
+          fi
+          echo "No literal backslash-t sequences found."
+
+      - name: List project targets and schemes
+        run: |
+          set -euo pipefail
+          xcodebuild -project "${PROJECT}" -list
+
+      - name: Verify shared scheme exists
+        run: |
+          set -euo pipefail
+          SCHEME_FILE="${PROJECT}/xcshareddata/xcschemes/${SCHEME}.xcscheme"
+          if [ ! -f "${SCHEME_FILE}" ]; then
+            echo "::error::Missing shared scheme at ${SCHEME_FILE}"
+            exit 1
+          fi
+          echo "Shared scheme present: ${SCHEME_FILE}"
+
+      - name: Resolve Swift packages
+        run: |
+          set -euo pipefail
+          xcodebuild -resolvePackageDependencies -project "${PROJECT}" -scheme "${SCHEME}" || true
+
+      # ---------------------------------------------------------------
+      # 2. Build for a real iOS device slice (arm64, iphoneos SDK).
+      #    Code signing is fully disabled: this produces an unsigned
+      #    .app that we package into an unsigned .ipa ourselves.
+      # ---------------------------------------------------------------
+      - name: Build for iphoneos (unsigned)
+        run: |
+          set -euo pipefail
+          CONFIG="${{ github.event.inputs.configuration || 'Release' }}"
+          echo "Configuration: ${CONFIG}"
+
+          xcodebuild \
+            -project "${PROJECT}" \
+            -scheme "${SCHEME}" \
+            -configuration "${CONFIG}" \
+            -sdk iphoneos \
+            -destination 'generic/platform=iOS' \
+            -derivedDataPath build/DerivedData \
+            CODE_SIGN_IDENTITY="" \
+            CODE_SIGNING_REQUIRED=NO \
+            CODE_SIGNING_ALLOWED=NO \
+            CODE_SIGN_ENTITLEMENTS="" \
+            ENABLE_BITCODE=NO \
+            ONLY_ACTIVE_ARCH=NO \
+            build \
+            | tee build/xcodebuild.log
+
+      - name: Verify the app bundle and its Metal library
+        run: |
+          set -euo pipefail
+          CONFIG="${{ github.event.inputs.configuration || 'Release' }}"
+          APP="build/DerivedData/Build/Products/${CONFIG}-iphoneos/${APP_NAME}.app"
+
+          if [ ! -d "${APP}" ]; then
+            echo "::error::Expected app bundle not found at ${APP}"
+            echo "--- products dir ---"
+            ls -la "build/DerivedData/Build/Products/" || true
+            exit 1
+          fi
+
+          echo "App bundle contents:"
+          ls -la "${APP}"
+
+          # An empty/missing default.metallib means the Metal viewport would
+          # render black at runtime, so treat it as a hard failure.
+          if [ ! -f "${APP}/default.metallib" ]; then
+            echo "::error file=${APP}::default.metallib is missing — Shaders.metal was not compiled."
+            exit 1
+          fi
+          echo "Metal library present: $(ls -l "${APP}/default.metallib")"
+
+          # Confirm we actually produced an arm64 device binary.
+          file "${APP}/${APP_NAME}" || true
+
+      # ---------------------------------------------------------------
+      # 3. Package Payload/DOneCAD.app into an unsigned .ipa.
+      # ---------------------------------------------------------------
+      - name: Package unsigned IPA
+        run: |
+          set -euo pipefail
+          CONFIG="${{ github.event.inputs.configuration || 'Release' }}"
+          APP="build/DerivedData/Build/Products/${CONFIG}-iphoneos/${APP_NAME}.app"
+
+          rm -rf build/Payload
+          mkdir -p build/Payload
+          cp -R "${APP}" "build/Payload/${APP_NAME}.app"
+
+          # Strip any leftover signature so the IPA is genuinely unsigned.
+          rm -rf "build/Payload/${APP_NAME}.app/_CodeSignature"
+          rm -f  "build/Payload/${APP_NAME}.app/embedded.mobileprovision"
+
+          cd build
+          rm -f "${IPA_NAME}"
+          # Use ditto rather than zip: it preserves symlinks, permissions and
+          # resource forks the way iOS expects inside an .ipa payload.
+          zip -qry "${IPA_NAME}" Payload
+          cd ..
+
+          echo "IPA written to build/${IPA_NAME}"
+          ls -lh "build/${IPA_NAME}"
+
+          mkdir -p dist
+          mv "build/${IPA_NAME}" "dist/${IPA_NAME}"
+
+          echo "--- IPA payload ---"
+          unzip -l "dist/${IPA_NAME}" | sed -n '1,40p'
+
+      - name: Verify IPA structure
+        run: |
+          set -euo pipefail
+          unzip -l "dist/${IPA_NAME}" | grep -q "Payload/${APP_NAME}.app/${APP_NAME}" \
+            || { echo "::error::IPA does not contain Payload/${APP_NAME}.app/${APP_NAME}"; exit 1; }
+          echo "IPA structure verified."
+
+      # ---------------------------------------------------------------
+      # 4. Upload. The artifact contains the .ipa at its root, so it can
+      #    be downloaded and re-signed on Windows without digging through
+      #    DerivedData.
+      # ---------------------------------------------------------------
+      - name: Upload IPA artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ env.ARTIFACT_NAME }}
+          path: dist/${{ env.IPA_NAME }}
+          if-no-files-found: error
+          retention-days: 30
+
+      - name: Upload build log
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: DOneCAD-xcodebuild-log
+          path: build/xcodebuild.log
+          if-no-files-found: ignore
+          retention-days: 14
+
+      # On failure, surface the interesting parts of the log in the run page.
+      - name: Show errors on failure
+        if: failure()
+        run: |
+          echo "================ xcodebuild errors ================"
+          grep -nE "error:|error :|fatal error:|❌|** BUILD FAILED **" build/xcodebuild.log | tail -n 120 || true
+          echo "==================================================="
+          tail -n 200 build/xcodebuild.log || true
